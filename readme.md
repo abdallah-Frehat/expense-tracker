@@ -312,3 +312,12 @@ I added custom CSS and used !important where needed to fix the colors.
 
 - Result:
 The text, cards, and table became clear and easier to read in Dark Mode.
+
+
+ Project Demo
+
+Watch the project demo video:(https://drive.google.com/file/d/1Qz-d6B-wAcFTUSjO9u9U5AOpfR1OIQ_U/view?usp=sharing)
+
+ GitHub Repository
+
+View the project on GitHub:(https://github.com/abdallah-Frehat/expense-tracker)
