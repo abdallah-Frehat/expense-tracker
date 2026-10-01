@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="./css/style.css"></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <span class="navbar-brand h1-text g-text">EXPENSE TRACKER</span>
+        </div>
+   <button id="darkModeToggle" class="btn btn-outline-secondary rounded-pill px-3 py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm">
+    <i id="themeIcon" class="fas fa-moon"></i> 
+<span id="themeText">Dark Mode</span></button>
+    </nav>
+
+    <div class="container my-4">
+        
+        <div class="row g-4 mb-4">
+            <div class="col-md-4 d-flex">
+                <div class="card stat-card w-100">
+                    <span class="stat-title">Total</span>
+                    <h3 class="stat-value" id="totalAmount">0.00</h3>
+                </div>
+            </div>
+
+            <div class="col-md-4 d-flex">
+                <div class="card stat-card w-100">
+                    <span class="stat-title">Number of expenses</span>
+                    <h3 class="stat-value" id="totalCount">0</h3>
+                </div>
+            </div>
+
+            <div class="col-md-4 d-flex">
+                <div class="card stat-card w-100">
+                    <span class="stat-title">Highest expense</span>
+                    <h3 class="stat-value" id="highestExpense">
+                        0.00
+                        <span class="stat-subtitle">-</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4 rounded-4 bg-white p-3">
+            <div class="card-body">
+                <h5 class="card-title fw-bold mb-3 text-dark">Add expense</h5>
+                <form id="expenseForm" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="title" class="form-label fw-semibold">Title</label>
+                            <input type="text" class="form-control rounded-3" id="title" placeholder="e.g. Lunch" required>
+                            <div class="invalid-feedback">Title is required.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="amount" class="form-label fw-semibold">Amount</label>
+                            <input type="number" step="0.01" min="0.01" class="form-control rounded-3" id="amount" placeholder="4.50" required>
+                            <div class="invalid-feedback">Enter an amount greater than 0.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="category" class="form-label fw-semibold">Category</label>
+                            <select class="form-select rounded-3" id="category" required>
+                                <option value="" selected disabled>Choose...</option>
+                                <option value="Food">Food</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Bills">Bills</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="invalid-feedback">Choose a category.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="date" class="form-label fw-semibold">Date</label>
+                            <input type="date" class="form-control rounded-3" id="date" required>
+                            <div class="invalid-feedback">Please select a valid date.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-purple mt-3 px-4 fw-semibold rounded-3 text-white">Add expense</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="loadingSpinner" class="text-center my-4 d-none">
+            <div class="spinner-border" style="color: #7952b3;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="card shadow border-0 rounded-4 bg-white p-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                            <h4 class="card-title fw-bold text-dark m-0">Expenses</h4>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-secondary fw-semibold fs-6">Category</span>
+                                <select class="form-select rounded-3 w-auto" id="filterCategory">
+                                    <option value="All" selected>All</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Bills">Bills</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+<div class="col-md-6">
+    <div class="search-box-container d-flex align-items-center shadow-sm">
+        <input type="text" id="searchInput" class="form-control border-0 px-4 py-2" placeholder="Search...!">
+        <button type="button" id="searchBtn" class="btn btn-primary px-4 py-2 fw-semibold">Search</button>
+    </div>
+</div>
+
+  <br>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0 w-100">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="py-3 text-secondary fw-semibold">Title</th>
+                                        <th class="py-3 text-secondary fw-semibold">Amount</th>
+                                        <th class="py-3 text-secondary fw-semibold">Category</th>
+                                        <th class="py-3 text-secondary fw-semibold">Date</th>
+                                        <th class="py-3 text-secondary fw-semibold text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expensesTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="editModalLabel">Edit Expense</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editExpenseForm">
+                        <input type="hidden" id="editId">
+                        <div class="mb-3">
+                            <label for="editTitle" class="form-label fw-semibold">Title</label>
+                            <input type="text" class="form-control rounded-3" id="editTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAmount" class="form-label fw-semibold">Amount</label>
+                            <input type="number" step="0.01" min="0.01" class="form-control rounded-3" id="editAmount" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCategory" class="form-label fw-semibold">Category</label>
+                            <select class="form-select rounded-3" id="editCategory" required>
+                                <option value="Food">Food</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Bills">Bills</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDate" class="form-label fw-semibold">Date</label>
+                            <input type="date" class="form-control rounded-3" id="editDate" required>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary rounded-3 px-4" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-purple rounded-3 px-4 text-white">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast align-items-center text-white bg-success border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div id="toastMessage" class="toast-body py-3 fw-semibold">
+             
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./JS/app.js"></script>
+</body>
+</html>
