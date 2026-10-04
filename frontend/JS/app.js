@@ -43,7 +43,7 @@ function showToast(message, type = 'success') {
 
     toastElement.className = `toast align-items-center text-white border-0 shadow-lg rounded-4 ${type === 'success' ? 'bg-success' : 'bg-danger'}`;
 
-    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+    const toast = new bootstrap.Toast(toastElement, { delay: 5000 });
     toast.show();
 }
 
