@@ -8,22 +8,22 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.get('/api/test-db',async (req ,res) =>{
-    try{
-        const result =await pool.query('SELECT NOW()');
-        res.json({
-            success: true,
-            message: "Database connected successfully",
-            time: result.rows[0].now
-        });
-    } catch (err){
-        console.error("Database Error:",Error.message);
-        res.status(500).json({
-            success: false,
-            error:err.message
-        })
-    }
-});
+// app.get('/api/test-db',async (req ,res) =>{
+//     try{
+//         const result =await pool.query('SELECT NOW()');
+//         res.json({
+//             success: true,
+//             message: "Database connected successfully",
+//             time: result.rows[0].now
+//         });
+//     } catch (err){
+//         console.error("Database Error:",Error.message);
+//         res.status(500).json({
+//             success: false,
+//             error:err.message
+//         })
+//     }
+// });
 
 app.post('/api/expenses', async (req, res) => {
     const { title, amount, category, date } = req.body;
