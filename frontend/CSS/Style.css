@@ -62,9 +62,9 @@ body {
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(121, 82, 179, 0.2);
-    border-color: #7952b3;
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 30px rgba(121, 82, 179, 0.2) !important;
+    border-color: #7952b3 !important;
 }
 
 .stat-title {
