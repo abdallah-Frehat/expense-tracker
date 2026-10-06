@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config(); 
+require('dotenv').config();
 const pool = require('./db');
 
 const app = express();
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -52,7 +52,7 @@ app.post('/api/expenses', async (req, res) => {
 
         res.status(201).json({
             success: true,
-message: "The expense has been added successfully",
+            message: "The expense has been added successfully",
             data: result.rows[0]
         });
 
@@ -87,11 +87,11 @@ app.get('/api/expenses/:id', async (req, res) => {
             WHERE id = $1;
         `;
         const result = await pool.query(query, [id]);
-        
+
         if (result.rows.length === 0) {
             return res.status(404).json({ success: false, message: "The expense does not exist" });
         }
-        
+
         res.status(200).json(result.rows[0]);
     } catch (err) {
         console.error("Error fetching expense by ID:", err.message);
@@ -109,12 +109,12 @@ app.put('/api/expenses/:id', async (req, res) => {
     }
 
     if (isNaN(amount) || Number(amount) <= 0) {
-        return res.status(400).json({ success: false, message: "The amount must be a number > zero"  });
+        return res.status(400).json({ success: false, message: "The amount must be a number > zero" });
     }
 
     const allowedCategories = ['Food', 'Transport', 'Bills', 'Entertainment', 'Other'];
     if (!allowedCategories.includes(category)) {
-        return res.status(400).json({ success: false, message: "Classification is not permitted"});
+        return res.status(400).json({ success: false, message: "Classification is not permitted" });
     }
 
     try {
